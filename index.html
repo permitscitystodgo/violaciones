@@ -28,8 +28,6 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            color: #0f172a;
             overflow-y: scroll;
         }
 
@@ -41,33 +39,180 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 9999px;
+            background: rgba(100, 116, 139, 0.2);
+            border-radius: 9991px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            background: rgba(100, 116, 139, 0.4);
         }
 
         /* Beautiful Dynamic Card Glow */
         .luxury-shadow {
             box-shadow: 0 4px 12px -1px rgba(15, 23, 42, 0.03), 0 2px 4px -1px rgba(15, 23, 42, 0.02);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .luxury-shadow:hover {
-            box-shadow: 0 20px 32px -12px rgba(13, 148, 136, 0.12), 0 4px 12px -4px rgba(13, 148, 136, 0.06);
+            box-shadow: 0 20px 32px -12px rgba(13, 148, 136, 0.15), 0 4px 12px -4px rgba(13, 148, 136, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* Dynamic Animated Background Keyframes */
+        @keyframes rotate-slow {
+            0% { transform: rotate(0deg) translate(0px, 0px) scale(1); }
+            50% { transform: rotate(180deg) translate(80px, 50px) scale(1.15); }
+            100% { transform: rotate(360deg) translate(0px, 0px) scale(1); }
+        }
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1) translate(0px, 0px) rotate(0deg); }
+            50% { transform: scale(1.22) translate(-60px, -30px) rotate(90deg); }
+        }
+        @keyframes flow-reverse {
+            0%, 100% { transform: scale(1.1) translate(0px, 0px) rotate(0deg); }
+            50% { transform: scale(0.9) translate(-40px, 40px) rotate(-90deg); }
+        }
+
+        .animate-rotation-1 {
+            animation: rotate-slow 24s infinite alternate ease-in-out;
+        }
+
+        .animate-pulse-slow {
+            animation: pulse-slow 30s infinite alternate ease-in-out;
+        }
+
+        .animate-flow-rev {
+            animation: flow-reverse 27s infinite alternate ease-in-out;
+        }
+
+        /* Color Palettes */
+        .color-palette-teal {
+            background: linear-gradient(135deg, #f8fafc 0%, #f0fdfa 40%, #e0f2fe 100%) !important;
+            transition: background 0.8s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.8s, color 0.5s;
+        }
+        .color-palette-teal #glow-blob-1 { background-color: rgba(45, 212, 191, 0.22); }
+        .color-palette-teal #glow-blob-2 { background-color: rgba(251, 191, 36, 0.16); }
+        .color-palette-teal #glow-blob-3 { background-color: rgba(129, 140, 248, 0.2); }
+        .color-palette-teal #glow-blob-4 { background-color: rgba(244, 114, 182, 0.12); }
+
+        .color-palette-sunset {
+            background: linear-gradient(135deg, #fffcf9 0%, #fff7ed 45%, #fef3c7 100%) !important;
+            transition: background 0.8s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.8s, color 0.5s;
+        }
+        .color-palette-sunset #glow-blob-1 { background-color: rgba(244, 63, 94, 0.24); }
+        .color-palette-sunset #glow-blob-2 { background-color: rgba(249, 115, 22, 0.2); }
+        .color-palette-sunset #glow-blob-3 { background-color: rgba(236, 72, 153, 0.18); }
+        .color-palette-sunset #glow-blob-4 { background-color: rgba(253, 224, 71, 0.16); }
+
+        .color-palette-oasis {
+            background: linear-gradient(135deg, #fbfdfc 0%, #f4faf7 40%, #d1fae5 100%) !important;
+            transition: background 0.8s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.8s, color 0.5s;
+        }
+        .color-palette-oasis #glow-blob-1 { background-color: rgba(16, 185, 129, 0.22); }
+        .color-palette-oasis #glow-blob-2 { background-color: rgba(34, 197, 94, 0.16); }
+        .color-palette-oasis #glow-blob-3 { background-color: rgba(20, 184, 166, 0.22); }
+        .color-palette-oasis #glow-blob-4 { background-color: rgba(132, 204, 22, 0.14); }
+
+        .color-palette-miami {
+            background-color: #0b1329 !important;
+            background-image: radial-gradient(circle at 50% 0%, #172554 0%, #080c18 100%) !important;
+            transition: background 0.8s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.8s, color 0.5s;
+        }
+        .color-palette-miami #glow-blob-1 { background-color: rgba(6, 182, 212, 0.35); }
+        .color-palette-miami #glow-blob-2 { background-color: rgba(219, 39, 119, 0.3); }
+        .color-palette-miami #glow-blob-3 { background-color: rgba(139, 92, 246, 0.35); }
+        .color-palette-miami #glow-blob-4 { background-color: rgba(59, 130, 246, 0.3); }
+
+        /* Dark mode overrides for cards under Miami Night */
+        .color-palette-miami .luxury-shadow {
+            background-color: rgba(15, 23, 42, 0.82) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            border-color: rgba(51, 65, 85, 0.5) !important;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8) !important;
+        }
+        .color-palette-miami .luxury-shadow:hover {
+            border-color: rgba(6, 182, 212, 0.6) !important;
+            box-shadow: 0 20px 40px -15px rgba(6, 182, 212, 0.25) !important;
+        }
+        .color-palette-miami h1,
+        .color-palette-miami h2,
+        .color-palette-miami h3,
+        .color-palette-miami .text-slate-900 {
+            color: #ffffff !important;
+        }
+        .color-palette-miami p,
+        .color-palette-miami .text-slate-500,
+        .color-palette-miami .text-slate-400 {
+            color: #94a3b8 !important;
+        }
+        .color-palette-miami .bg-slate-100 {
+            background-color: #1e293b !important;
+        }
+        .color-palette-miami .text-slate-700 {
+            color: #cbd5e1 !important;
+        }
+        .color-palette-miami .bg-slate-50\/50,
+        .color-palette-miami .bg-slate-50 {
+            background-color: rgba(30, 41, 59, 0.6) !important;
+        }
+        .color-palette-miami input {
+            color: white !important;
+            background-color: #0f172a !important;
+            border-color: #334155 !important;
+        }
+        .color-palette-miami input::placeholder {
+            color: #64748b !important;
+        }
+        .color-palette-miami #progress-percentage {
+            color: #22d3ee !important;
+        }
+        .color-palette-miami .border-sky-100,
+        .color-palette-miami .border-emerald-100,
+        .color-palette-miami .border-slate-100 {
+            border-color: rgba(51, 65, 85, 0.55) !important;
+        }
+        .color-palette-miami .bg-white {
+            background-color: rgba(15, 23, 42, 0.8) !important;
         }
     </style>
 </head>
-<body class="min-h-screen bg-slate-50 pb-24 antialiased">
+<body class="min-h-screen color-palette-teal pb-24 antialiased overflow-x-hidden relative">
 
-    <!-- Decorative Glow Effects -->
-    <div class="absolute top-0 right-1/4 -z-10 h-[380px] w-96 rounded-full bg-teal-400/10 blur-3xl"></div>
-    <div class="absolute top-10 left-1/4 -z-10 h-[340px] w-96 rounded-full bg-amber-300/10 blur-3xl"></div>
-    <div class="absolute top-20 left-1/2 -z-10 h-[300px] w-80 -translate-x-1/2 rounded-full bg-indigo-400/10 blur-3xl"></div>
+    <!-- Top Theme Selector / Ambient Switcher Panel (Vista Exclusiva) -->
+    <div class="w-full bg-white/40 backdrop-blur-md border-b border-slate-200/50 py-2 px-6 relative z-50">
+        <div class="mx-auto max-w-5xl flex items-center justify-between flex-wrap gap-3">
+            <div class="flex items-center gap-2">
+                <span class="inline-flex h-2.5 w-2.5 rounded-full bg-teal-500 animate-pulse"></span>
+                <span id="theme-status-lbl" class="text-xs font-bold text-slate-700 font-sans">Visualización: Primavera de Florida</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 font-sans">Fondo Ambiental:</span>
+                <div class="flex items-center gap-1 bg-slate-200/60 p-1 rounded-full border border-slate-300/40">
+                    <button onclick="setThemePalette('teal')" id="palette-btn-teal" class="relative group flex items-center justify-center p-1.5 rounded-full bg-white transition-all shadow-sm" title="Primavera (Teal)">
+                        <span class="h-3 w-3 rounded-full bg-gradient-to-tr from-teal-400 to-sky-400"></span>
+                    </button>
+                    <button onclick="setThemePalette('sunset')" id="palette-btn-sunset" class="relative group flex items-center justify-center p-1.5 rounded-full hover:bg-white transition-all" title="Atardecer (Sunset)">
+                        <span class="h-3 w-3 rounded-full bg-gradient-to-tr from-rose-450 from-rose-400 to-amber-400"></span>
+                    </button>
+                    <button onclick="setThemePalette('oasis')" id="palette-btn-oasis" class="relative group flex items-center justify-center p-1.5 rounded-full hover:bg-white transition-all" title="Oasis (Emerald)">
+                        <span class="h-3 w-3 rounded-full bg-gradient-to-tr from-emerald-400 to-teal-400"></span>
+                    </button>
+                    <button onclick="setThemePalette('miami')" id="palette-btn-miami" class="relative group flex items-center justify-center p-1.5 rounded-full hover:bg-white transition-all" title="Miami Night (Dark)">
+                        <span class="h-3 w-3 rounded-full bg-gradient-to-tr from-violet-600 to-pink-500"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Decorative Glow Effects (Vibrant Mesh Spheres) -->
+    <div id="glow-blob-1" class="absolute -top-20 right-1/4 -z-10 h-[500px] w-[500px] rounded-full blur-[110px] mix-blend-multiply opacity-80 animate-rotation-1 transition-all duration-1000"></div>
+    <div id="glow-blob-2" class="absolute top-40 left-1/4 -z-10 h-[450px] w-[450px] rounded-full blur-[110px] mix-blend-multiply opacity-80 animate-pulse-slow transition-all duration-1000"></div>
+    <div id="glow-blob-3" class="absolute top-20 left-1/2 -z-10 h-[400px] w-[400px] -translate-x-1/2 rounded-full blur-[110px] mix-blend-multiply opacity-80 animate-flow-rev transition-all duration-1000"></div>
+    <div id="glow-blob-4" class="absolute bottom-40 left-10 -z-10 h-[450px] w-[450px] rounded-full blur-[130px] mix-blend-multiply opacity-60 animate-rotation-1 transition-all duration-1000 hidden md:block"></div>
 
     <!-- Grid Pattern Background -->
-    <div class="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#0284c70a_1px,transparent_1px),linear-gradient(to_bottom,#0284c70a_1px,transparent_1px)] bg-[size:16px_28px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_80%,transparent_100%)]"></div>
+    <div class="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#0284c70f_1px,transparent_1px),linear-gradient(to_bottom,#0284c70f_1px,transparent_1px)] bg-[size:16px_28px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_80%,transparent_100%)]"></div>
 
     <header class="mx-auto max-w-5xl px-6 pt-12 md:pt-16">
         <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
@@ -395,6 +540,7 @@
         let selectedCategory = "All";
         let statusFilter = "All";
         let openedModuleId = null;
+        let currentPalette = "teal";
 
         // Load resources from localStorage safely
         function initStorage() {
@@ -406,6 +552,10 @@
                         completedIds = parsed.filter(id => typeof id === "number");
                     }
                 }
+                
+                // Initialize background theme
+                const storedTheme = localStorage.getItem("themePalette") || "teal";
+                setThemePalette(storedTheme, false);
             } catch (err) {
                 completedIds = [];
             }
@@ -415,6 +565,46 @@
             try {
                 localStorage.setItem("completedModules", JSON.stringify(completedIds));
             } catch (err) {}
+        }
+
+        function setThemePalette(palette, save = true) {
+            currentPalette = palette;
+            const body = document.body;
+            
+            // Remove previous classes
+            body.classList.remove("color-palette-teal", "color-palette-sunset", "color-palette-oasis", "color-palette-miami");
+            
+            // Add new class
+            body.classList.add(`color-palette-${palette}`);
+            
+            // Highlight active control button
+            const palettes = ["teal", "sunset", "oasis", "miami"];
+            palettes.forEach(p => {
+                const btn = document.getElementById(`palette-btn-${p}`);
+                if (btn) {
+                    if (p === palette) {
+                        btn.className = "relative group flex items-center justify-center p-1.5 rounded-full bg-white shadow-md border border-teal-500/20 scale-110 transition-all duration-200 cursor-pointer";
+                    } else {
+                        btn.className = "relative group flex items-center justify-center p-1.5 rounded-full hover:bg-white transition-all scale-100 cursor-pointer";
+                    }
+                }
+            });
+
+            // Update status label text
+            const label = document.getElementById("theme-status-lbl");
+            if (label) {
+                let friendlyName = "Primavera de Florida";
+                if (palette === "sunset") friendlyName = "Atardecer de Cayo Hueso";
+                if (palette === "oasis") friendlyName = "Oasis Esmeralda";
+                if (palette === "miami") friendlyName = "Noche de Miami (Estilo Premium)";
+                label.innerText = `Visualización: ${friendlyName}`;
+            }
+
+            if (save) {
+                try {
+                    localStorage.setItem("themePalette", palette);
+                } catch (err) {}
+            }
         }
 
         // Render UI Controls
