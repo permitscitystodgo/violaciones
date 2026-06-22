@@ -3,423 +3,725 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma de Entrenamiento - Búsqueda de Violaciones de Ciudades</title>
-    
-    <!-- Tailwind CSS para el diseño vivo y moderno -->
+    <title>Plataforma de Entrenamiento - Búsqueda de Violaciones Florida</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     }
                 }
             }
         }
     </script>
-    
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
             color: #0f172a;
+            overflow-y: scroll;
         }
+
+        /* Custom Elegant Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Beautiful Dynamic Card Glow */
         .luxury-shadow {
             box-shadow: 0 4px 12px -1px rgba(15, 23, 42, 0.03), 0 2px 4px -1px rgba(15, 23, 42, 0.02);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         .luxury-shadow:hover {
-            box-shadow: 0 20px 32px -12px rgba(13, 148, 136, 0.15), 0 4px 12px -4px rgba(13, 148, 136, 0.08);
-            transform: translateY(-2px);
+            box-shadow: 0 20px 32px -12px rgba(13, 148, 136, 0.12), 0 4px 12px -4px rgba(13, 148, 136, 0.06);
         }
     </style>
-    
-    <!-- Dependencias de React y Babel para JSX directo en el navegador -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body class="min-h-screen bg-slate-50pb-24 antialiased relative">
+<body class="min-h-screen bg-slate-50 pb-24 antialiased">
 
-    <!-- Patrón geométrico e iluminación de fondo -->
-    <div class="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#0284c70a_1px,transparent_1px),linear-gradient(to_bottom,#0284c70a_1px,transparent_1px)] bg-[size:16px_28px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_80%,transparent_100%)]"></div>
+    <!-- Decorative Glow Effects -->
     <div class="absolute top-0 right-1/4 -z-10 h-[380px] w-96 rounded-full bg-teal-400/10 blur-3xl"></div>
     <div class="absolute top-10 left-1/4 -z-10 h-[340px] w-96 rounded-full bg-amber-300/10 blur-3xl"></div>
+    <div class="absolute top-20 left-1/2 -z-10 h-[300px] w-80 -translate-x-1/2 rounded-full bg-indigo-400/10 blur-3xl"></div>
 
-    <div id="root"></div>
+    <!-- Grid Pattern Background -->
+    <div class="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#0284c70a_1px,transparent_1px),linear-gradient(to_bottom,#0284c70a_1px,transparent_1px)] bg-[size:16px_28px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_80%,transparent_100%)]"></div>
 
-    <script type="text/babel">
-        // Estructura de Ciudades optimizada para comprimir código sin repeticiones visuales
-        const citiesConfig = [
-            { name: "Hollywood", url: "https://drive.google.com/file/d/1ZDYxkVyQgthEbGf2wGj5agcV0XnIX1SO/view?usp=drive_web", cat: "Ciudad" },
-            { name: "Miami Shores", url: "https://drive.google.com/file/d/13xt4lPZq7ICoHfaRlMloO4V0NW9L7uWY/view?usp=drive_web", cat: "Ciudad" },
-            { name: "Miramar", url: "https://drive.google.com/file/d/1G_SdSucSov5vWdO-6Ef6ppZfs-mR25Lt/view?usp=drive_web", cat: "Ciudad" },
-            { name: "North Bay Village", url: "https://drive.google.com/file/d/12C_ARovUgpcdhufyPTYdtGAHJNtPDgOr/view?usp=drive_web", cat: "Village" },
-            { name: "Doral", url: "https://drive.google.com/file/d/1gq9YWpGrH_x7cXQF9phmTRfpJ-lufKPg/view?usp=drive_web", cat: "Ciudad" },
-            { name: "Coral Springs", url: "https://drive.google.com/file/d/19AGVNICuLvPuFIQUhbyOUSkGCIZfH3Q8/view", cat: "Ciudad" },
-            { name: "Coconut Creek", url: "#", cat: "Ciudad" },
-            { name: "Cooper City", url: "#", cat: "Ciudad" },
-            { name: "Dania Beach", url: "#", cat: "Ciudad" },
-            { name: "Deerfield Beach", url: "#", cat: "Ciudad" },
-            { name: "Fort Lauderdale", url: "#", cat: "Ciudad" },
-            { name: "Hallandale Beach", url: "https://drive.google.com/file/d/1eWOmVEM-2E2-yLjZWX-KCMXEBbSZegE-/view?usp=sharing", cat: "Ciudad" },
-            { name: "Lauderdale Lakes", url: "#", cat: "Ciudad" },
-            { name: "Lauderhill", url: "#", cat: "Ciudad" },
-            { name: "Lighthouse Point", url: "https://drive.google.com/file/d/15x8ATknnkquzeAV-nUnqJTYEVf70H812/view?usp=sharing", cat: "Ciudad" },
-            { name: "Margate", url: "#", cat: "Ciudad" },
-            { name: "North Lauderdale", url: "#", cat: "Ciudad" },
-            { name: "Oakland Park", url: "#", cat: "Ciudad" },
-            { name: "Parkland", url: "#", cat: "Ciudad" },
-            { name: "Pembroke Pines", url: "https://drive.google.com/file/d/1WYi-z370S1L9u5m-PmTJUHuOoLPFzjYK/view?usp=sharing", cat: "Ciudad" },
-            { name: "Plantation", url: "#", cat: "Ciudad" },
-            { name: "Pompano Beach", url: "#", cat: "Ciudad" },
-            { name: "Sunrise", url: "https://drive.google.com/file/d/1bbLy7y1V23gkgGqyoL9JUB-GpcDy-HAT/view?usp=sharing", cat: "Ciudad" },
-            { name: "Tamarac", url: "#", cat: "Ciudad" },
-            { name: "West Park", url: "#", cat: "Ciudad" },
-            { name: "Weston", url: "#", cat: "Ciudad" },
-            { name: "Wilton Manors", url: "#", cat: "Ciudad" },
-            { name: "Davie", url: "#", cat: "Town" },
-            { name: "Hillsboro Beach", url: "#", cat: "Town" },
-            { name: "Pembroke Park", url: "#", cat: "Town" },
-            { name: "Lazy Lake", url: "#", cat: "Village" },
-            { name: "Sea Ranch Lakes", url: "#", cat: "Village" }
-        ];
+    <header class="mx-auto max-w-5xl px-6 pt-12 md:pt-16">
+        <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+            <div class="space-y-3">
+                <div class="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500 p-[1px] shadow-md shadow-sky-100">
+                    <span class="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3 py-1 text-[11px] font-bold tracking-wider uppercase text-teal-300">
+                        <i data-lucide="sparkles" class="h-3 w-3 text-amber-300"></i>
+                        <span>Plataforma de Entrenamiento</span>
+                    </span>
+                </div>
+                <h1 class="font-display text-4xl font-extrabold tracking-tight md:text-5xl text-slate-900">
+                    <span class="bg-gradient-to-r from-teal-600 via-sky-600 to-indigo-600 bg-clip-text text-transparent">
+                        Búsqueda de Violaciones por Ciudades
+                    </span>
+                </h1>
+                <p class="max-w-2xl text-sm leading-relaxed text-slate-500 md:text-base">
+                    Capacitación corporativa activa para la ejecución de investigaciones y permisos abiertos. 
+                    Selecciona un módulo para consultar el recurso en Google Drive, y marca <span class="font-bold text-teal-600">Listo</span> al finalizar.
+                </p>
+            </div>
 
-        // Mapea la configuración compacta a la lista completa de módulos interactivos
-        const loadedModules = citiesConfig.map((city, idx) => {
-            const id = idx + 1;
-            const prefix = city.cat === "Town" ? "del Town de" : city.cat === "Village" ? "del Village de" : "Ciudad de";
-            return {
-                id,
-                tag: `Módulo ${id}`,
-                title: `Búsqueda Violaciones ${prefix} ${city.name}`,
-                desc: city.url !== "#" 
-                    ? `Material audiovisual instructivo para utilizar la búsqueda de violaciones y revisar registros vigentes en esta localidad.`
-                    : `Sigue los pasos detallados de flujo manual en los registros estatales públicos para localizar violaciones en la región de ${city.name}.`,
-                url: city.url,
-                category: city.cat,
-                cityName: city.name
-            };
-        });
-
-        function App() {
-            const [completedIds, setCompletedIds] = React.useState(() => {
-                const stored = localStorage.getItem("completedModules_SingleFile");
-                return stored ? JSON.parse(stored) : [];
-            });
-
-            const [searchQuery, setSearchQuery] = React.useState("");
-            const [selectedCategory, setSelectedCategory] = React.useState("All");
-            const [statusFilter, setStatusFilter] = React.useState("All");
-            const [activeInfoModal, setActiveInfoModal] = React.useState(null);
-
-            React.useEffect(() => {
-                localStorage.setItem("completedModules_SingleFile", JSON.stringify(completedIds));
-            }, [completedIds]);
-
-            const handleToggleComplete = (id) => {
-                setCompletedIds(prev => 
-                    prev.includes(id) ? prev.filter(mId => mId !== id) : [...prev, id]
-                );
-            };
-
-            const handleReset = () => {
-                if (confirm("¿Deseas reiniciar todo tu progreso de entrenamiento?")) {
-                    setCompletedIds([]);
-                }
-            };
-
-            // Filtrado dinámico
-            const filtered = React.useMemo(() => {
-                return loadedModules.filter(module => {
-                    const matchesSearch = module.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                         module.desc.toLowerCase().includes(searchQuery.toLowerCase());
-                    const matchesCategory = selectedCategory === "All" || module.category === selectedCategory;
-                    const isDone = completedIds.includes(module.id);
-                    const matchesStatus = statusFilter === "All" || 
-                                         (statusFilter === "Completed" && isDone) || 
-                                         (statusFilter === "Pending" && !isDone);
-                    return matchesSearch && matchesCategory && matchesStatus;
-                });
-            }, [searchQuery, selectedCategory, statusFilter, completedIds]);
-
-            // Estadísticas
-            const total = loadedModules.length;
-            const completedCount = completedIds.length;
-            const progressPercentage = Math.round((completedCount / total) * 100) || 0;
-
-            const categoryCounts = React.useMemo(() => {
-                const counts = { All: total, Ciudad: 0, Town: 0, Village: 0 };
-                loadedModules.forEach(m => counts[m.category] += 1);
-                return counts;
-            }, []);
-
-            return (
-                <div className="max-w-5xl mx-auto px-6 pt-12 pb-20">
-                    
-                    {/* Encabezado Principal */}
-                    <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-                        <div className="space-y-3">
-                            <span className="inline-block bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500 p-[1px] rounded-full shadow-md">
-                                <span className="inline-block bg-slate-900 px-3.5 py-1 text-[10px] font-extrabold tracking-widest text-teal-350 uppercase rounded-full">
-                                    ★ Plataforma Corporativa Activa ★
-                                </span>
+            <!-- Supervisor Card -->
+            <div class="shrink-0 rounded-2xl border-2 border-emerald-100 bg-white p-5 shadow-md min-w-[240px] luxury-shadow relative overflow-hidden">
+                <div class="absolute top-0 right-0 h-16 w-16 -mr-4 -mt-4 rounded-full bg-emerald-500/5"></div>
+                <div class="flex items-center gap-3">
+                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-500 text-white font-display font-black text-lg shadow-md shadow-emerald-100">
+                        LG
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Supervisor General</p>
+                        <p class="font-display font-extrabold text-slate-900">Lic. Luis B. Gomez</p>
+                        <div class="mt-0.5 inline-flex items-center gap-1 text-[11px] text-teal-600 font-semibold font-sans">
+                            <span class="h-2 w-2 rounded-full bg-teal-500 relative">
+                                <span class="absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75 animate-ping"></span>
                             </span>
-                            <h1 className="font-display text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-teal-600 via-sky-600 to-indigo-600 bg-clip-text text-transparent">
-                                Búsqueda de Violaciones por Ciudades
-                            </h1>
-                            <p className="max-w-2xl text-sm md:text-base leading-relaxed text-slate-500 font-medium">
-                                Capacitación integral para el manejo de registros y detección de permisos abiertos en Florida. 
-                                Selecciona un recurso, domina el flujo y marca <span className="text-teal-600 font-extrabold">Listo</span>.
-                            </p>
+                            <span>Asesoría Activa</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                        {/* Tarjeta de Supervisor Luis B. Gomez */}
-                        <div className="rounded-2xl border-2 border-emerald-100 bg-white p-4.5 shadow-md min-w-[250px] luxury-shadow relative overflow-hidden">
-                            <div className="flex items-center gap-3 relative z-10">
-                                <div className="h-11 w-11 flex items-center justify-center bg-gradient-to-tr from-teal-500 to-emerald-500 text-white font-display font-black text-lg rounded-xl shadow-md">
-                                    LG
-                                </div>
-                                <div>
-                                    <p className="text-[9px] font-bold uppercase tracking-wider text-emerald-600">Supervisor de Procesos</p>
-                                    <p className="font-display font-extrabold text-slate-900 text-sm">Lic. Luis B. Gomez</p>
-                                    <div className="mt-0.5 inline-flex items-center gap-1 text-[10px] text-teal-600 font-semibold">
-                                        <span className="h-2 w-2 rounded-full bg-teal-500 animate-ping"></span>
-                                        <span>Asesoría Activa</span>
-                                    </div>
-                                </div>
-                            </div>
+        <!-- Dynamic Colorful Progress Hub -->
+        <div class="mt-8 overflow-hidden rounded-2xl border-2 border-sky-100 bg-white p-6 shadow-md luxury-shadow relative">
+            <div class="absolute -top-12 -left-12 h-32 w-32 rounded-full bg-teal-400/10 blur-xl"></div>
+            
+            <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between relative z-10">
+                <div class="space-y-3 flex-1">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="font-display text-lg font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
+                                <i data-lucide="file-check" class="h-5.5 w-5.5 text-teal-600"></i>
+                                <span>Tu Recorrido de Aprendizaje</span>
+                            </h2>
+                            <p class="text-xs text-slate-400 font-sans">Progreso sincronizado de forma segura en este navegador.</p>
+                        </div>
+                        <div class="text-right">
+                            <p id="progress-percentage" class="font-display text-3xl font-black bg-gradient-to-r from-teal-600 to-indigo-600 bg-clip-text text-transparent">
+                                0%
+                            </p>
+                            <p id="progress-stats" class="text-[11px] font-bold tracking-wide text-indigo-500 uppercase font-sans">
+                                0 de 32 Completados
+                            </p>
                         </div>
                     </div>
 
-                    {/* Centro de Control de Progreso */}
-                    <div className="mt-10 overflow-hidden rounded-2xl border-2 border-sky-100 bg-white p-6 shadow-md luxury-shadow relative">
-                        <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between">
-                            <div className="space-y-3 flex-1">
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <h2 className="font-display text-lg font-extrabold text-slate-800">Tu Ruta de Entrenamiento</h2>
-                                        <p className="text-xs text-slate-400">Progreso instantáneo registrado de forma autónoma.</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <span className="font-display text-3xl font-black bg-gradient-to-r from-teal-600 to-indigo-600 bg-clip-text text-transparent">{progressPercentage}%</span>
-                                        <p className="text-[10px] font-bold uppercase text-indigo-500 tracking-wider font-mono">{completedCount} de {total} Módulos</p>
-                                    </div>
-                                </div>
-                                <div className="h-3.5 w-full bg-slate-100 rounded-full p-[2px]">
-                                    <div className="h-full rounded-full bg-gradient-to-r from-teal-400 via-sky-400 to-indigo-600 transition-all duration-500" style={{width: `${progressPercentage}%`}}></div>
-                                </div>
+                    <!-- Progress Bar Container -->
+                    <div class="relative pt-2">
+                        <div class="h-3.5 w-full overflow-hidden rounded-full bg-slate-100 p-[2px]">
+                            <div id="progress-bar-fill" class="h-full rounded-full bg-gradient-to-r from-teal-400 via-sky-500 to-indigo-600 transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 md:self-end">
+                    <button
+                        onclick="resetProgress()"
+                        title="Restablecer progreso"
+                        class="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50/50 px-4 text-xs font-bold text-red-650 hover:bg-red-105 transition-colors cursor-pointer"
+                        id="reset-btn"
+                    >
+                        <i data-lucide="rotate-ccw" class="h-3.5 w-3.5"></i>
+                        <span>Reiniciar Progreso</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Filter and Modules Container -->
+    <main class="mx-auto max-w-5xl px-6 pt-8">
+        
+        <!-- Controls Bar -->
+        <div class="flex flex-col gap-4 rounded-2xl border-2 border-slate-100 bg-white p-5 shadow-md md:flex-row md:items-center md:justify-between luxury-shadow">
+            
+            <!-- Search Bar -->
+            <div class="relative flex-1 max-w-md">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <i data-lucide="search" class="h-4.5 w-4.5 text-teal-500"></i>
+                </div>
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Buscar temas, módulos o municipios de Florida..."
+                    class="w-full rounded-xl border-2 border-slate-100 bg-slate-50/50 py-2.5 pl-9 pr-8 text-sm outline-none placeholder:text-slate-400 focus:border-teal-500 focus:bg-white transition-all font-sans"
+                    oninput="handleSearch(this.value)"
+                >
+                <button 
+                    id="search-clear-btn"
+                    onclick="clearSearch()"
+                    class="absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400 hover:text-teal-600 hidden"
+                >
+                    <i data-lucide="x" class="h-4 w-4"></i>
+                </button>
+            </div>
+
+            <!-- Categories & Status Controls -->
+            <div class="flex flex-wrap items-center gap-3">
+                <!-- Category Selectors -->
+                <div class="flex items-center gap-1 rounded-xl bg-slate-100 p-1" id="category-selector">
+                    <button id="cat-all" onclick="changeCategory('All')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer bg-slate-900 text-white shadow-sm">
+                        Todos
+                    </button>
+                    <button id="cat-ciudad" onclick="changeCategory('Ciudad')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
+                        Ciudades
+                    </button>
+                    <button id="cat-town" onclick="changeCategory('Town')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
+                        Towns
+                    </button>
+                    <button id="cat-village" onclick="changeCategory('Village')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
+                        Villages
+                    </button>
+                </div>
+
+                <!-- Status Filter -->
+                <div class="flex items-center gap-1 rounded-xl bg-slate-100 p-1" id="status-selector">
+                    <button id="stat-all" onclick="changeStatus('All')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer bg-slate-950 text-white shadow-sm">
+                        Ambos
+                    </button>
+                    <button id="stat-pending" onclick="changeStatus('Pending')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
+                        Pendientes
+                    </button>
+                    <button id="stat-completed" onclick="changeStatus('Completed')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
+                        Listos
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Group Actions & Counter -->
+        <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-2">
+            <p id="visible-modules-count" class="text-xs font-medium text-slate-500">
+                Mostrando <span class="font-extrabold text-teal-600">32</span> módulos del entrenamiento
+            </p>
+            <button
+                id="mark-all-btn"
+                onclick="markVisibleAsComplete()"
+                class="text-xs font-bold text-teal-650 hover:text-teal-800 hover:underline inline-flex items-center gap-1 transition-colors hover:cursor-pointer"
+            >
+                <span>Marcar lista visible como completada</span>
+                <i data-lucide="chevron-right" class="h-3 w-3"></i>
+            </button>
+        </div>
+
+        <!-- Modules Grid Container -->
+        <div id="modules-container" class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Programmatically populated -->
+        </div>
+
+        <!-- Corporate Notes section with bright indigo accents -->
+        <section class="mt-16 rounded-2xl border-2 border-indigo-100 bg-gradient-to-b from-white to-slate-50/50 p-6 md:p-8 shadow-sm luxury-shadow relative overflow-hidden">
+            <div class="absolute top-0 right-0 h-24 w-24 bg-indigo-500/5 rounded-full blur-xl animate-pulse"></div>
+            
+            <h3 class="font-display text-lg font-bold text-slate-900 flex items-center gap-2 relative z-10">
+                <i data-lucide="book-open" class="h-5.5 w-5.5 text-indigo-700"></i>
+                <span>Guía Práctica & Metodología de Trabajo</span>
+            </h3>
+            <p class="mt-2 text-sm text-slate-500 font-sans">
+                Sigue estos pasos rigurosos recomendados por nuestra administración para asegurar auditorías de violaciones impecables:
+            </p>
+            
+            <div class="mt-8 grid gap-6 sm:grid-cols-3 relative z-10">
+                <div class="space-y-2.5 p-4 rounded-xl bg-white border border-slate-150 shadow-sm">
+                    <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 text-xs font-extrabold text-teal-700 border border-teal-100 font-display">
+                        1
+                    </div>
+                    <p class="text-xs font-bold text-slate-800 font-display">Recurso de Consulta</p>
+                    <p class="text-xs text-slate-400 leading-relaxed font-sans">
+                        Accede al material audiovisual provisto para la ciudad correspondiente. El enlace te dirigirá directamente al recurso en Google Drive corporativo.
+                    </p>
+                </div>
+                
+                <div class="space-y-2.5 p-4 rounded-xl bg-white border border-slate-150 shadow-sm">
+                    <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-xs font-extrabold text-amber-700 border border-amber-100 font-display">
+                        2
+                    </div>
+                    <p class="text-xs font-bold text-slate-800 font-display">Verificación Manual</p>
+                    <p class="text-xs text-slate-400 leading-relaxed font-sans">
+                        Para los municipios etiquetados como <span class="font-bold text-amber-700">"Búsqueda Manual"</span>, sintoniza el portal estatal utilizando la dirección física y el folio de propiedad.
+                    </p>
+                </div>
+
+                <div class="space-y-2.5 p-4 rounded-xl bg-white border border-slate-150 shadow-sm">
+                    <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-xs font-extrabold text-indigo-700 border border-indigo-100 font-display">
+                        3
+                    </div>
+                    <p class="text-xs font-bold text-slate-800 font-display">Lista de Control</p>
+                    <p class="text-xs text-slate-400 leading-relaxed font-sans">
+                        Una vez dominado el flujo de búsqueda de la ciudad, presiona el botón "Listo". Tu progreso se guardará automáticamente en tiempo real.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Info Modal / Dialog for Manual flow -->
+    <div id="info-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <!-- Backdrop -->
+        <div onclick="closeModal()" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"></div>
+        
+        <!-- Modal Content Boilerplate -->
+        <div class="relative w-full max-w-lg rounded-3xl border-2 border-amber-100 bg-white p-6 shadow-2xl z-10 overflow-hidden transform scale-95 transition-all duration-300">
+            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-amber-400 via-teal-400 to-indigo-500"></div>
+
+            <button onclick="closeModal()" class="absolute top-4 right-4 rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-900 transition-all cursor-pointer">
+                <i data-lucide="x" class="h-5 w-5"></i>
+            </button>
+
+            <div class="flex flex-col items-start gap-4 mt-2">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 border border-amber-150">
+                    <i data-lucide="map-pin" class="h-6 w-6 text-amber-600"></i>
+                </div>
+
+                <div class="w-full">
+                    <div class="flex items-center gap-2">
+                        <span id="modal-tag" class="text-[10px] font-bold tracking-wider uppercase text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100 font-display">
+                            Módulo 7 — Manual flow
+                        </span>
+                        <span class="h-1 w-1 rounded-full bg-slate-300"></span>
+                        <span id="modal-category" class="text-[10px] bg-slate-100 text-slate-700 font-bold tracking-wider uppercase px-2 py-0.5 rounded-md font-sans">
+                            Ciudad
+                        </span>
+                    </div>
+                    <h3 id="modal-title" class="mt-2 font-display text-2xl font-black text-slate-900 leading-tight">
+                        Búsqueda de Coconut Creek
+                    </h3>
+                    
+                    <div class="mt-4 space-y-3.5 text-sm text-slate-500 leading-relaxed font-sans">
+                        <p>
+                            Este municipio tiene un flujo de consulta <span class="font-extrabold text-slate-800">manual regulado</span>. 
+                            Para realizar la auditoría de violaciones y permisos:
+                        </p>
+                        
+                        <ul class="space-y-3 border-l-2 border-amber-300 pl-4 py-1 text-xs text-slate-600 font-sans">
+                            <li>
+                                <strong class="text-slate-800">Paso A:</strong> Accede al portal oficial principal de la ciudad directamente utilizando tu navegador preferido.
+                            </li>
+                            <li>
+                                <strong class="text-slate-800">Paso B:</strong> Busca el apartado de <em>"Building Division"</em>, <em>"Code Enforcement"</em>, o el portal de records públicos <em>"Citizen Self Service"</em>.
+                            </li>
+                            <li>
+                                <strong class="text-slate-800">Paso C:</strong> Configura la consulta ingresando la dirección parcelaria o el ID de folio de la propiedad bajo investigación.
+                            </li>
+                        </ul>
+
+                        <p class="text-xs bg-amber-50/50 border border-amber-100 p-3 rounded-xl text-amber-800 italic font-sans leading-relaxed">
+                            "Para soporte técnico adicional o aclaratorias sobre la base de datos de esta región, recuerda que siempre puedes contactar al supervisor general, Lic. Luis B. Gomez."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex w-full items-center gap-3">
+                    <button id="modal-action-btn" class="flex-1 rounded-xl bg-gradient-to-r from-teal-600 to-indigo-600 py-3 text-center text-xs font-bold text-white hover:opacity-95 transition-opacity shadow-md pointer-events-auto cursor-pointer">
+                        Marcar Módulo como Realizado
+                    </button>
+                    <button onclick="closeModal()" class="rounded-xl border border-slate-200 py-3 px-5 text-center text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer">
+                        Entendido
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data & State Script -->
+    <script>
+        // Data block matching package exactly
+        const trainingModules = [
+            { id: 1, tag: "Módulo 1", title: "Búsqueda Violaciones Ciudad de Hollywood", desc: "Material audiovisual inicial para utilizar la búsqueda de violaciones en esta ciudad.", url: "https://drive.google.com/file/d/1ZDYxkVyQgthEbGf2wGj5agcV0XnIX1SO/view?usp=drive_web", category: "Ciudad" },
+            { id: 2, tag: "Módulo 2", title: "Búsqueda Violaciones Ciudad de Miami Shores", desc: "Guía detallada sobre cómo realizar la ejecución de las búsquedas de las violaciones en este lugar.", url: "https://drive.google.com/file/d/13xt4lPZq7ICoHfaRlMloO4V0NW9L7uWY/view?usp=drive_web", category: "Ciudad" },
+            { id: 3, tag: "Módulo 3", title: "Búsqueda Violaciones Ciudad de Miramar", desc: "Capacitación práctica para buscar las violaciones y permisos abiertos en la ciudad.", url: "https://drive.google.com/file/d/1G_SdSucSov5vWdO-6Ef6ppZfs-mR25Lt/view?usp=drive_web", category: "Ciudad" },
+            { id: 4, tag: "Módulo 4", title: "Búsqueda Violaciones en North Bay Village", desc: "Cómo se deben realizar los pasos para buscar las violaciones dentro de esta localidad.", url: "https://drive.google.com/file/d/12C_ARovUgpcdhufyPTYdtGAHJNtPDgOr/view?usp=drive_web", category: "Village" },
+            { id: 5, tag: "Módulo 5", title: "Búsqueda Violaciones Ciudad de Doral", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Doral.", url: "https://drive.google.com/file/d/1gq9YWpGrH_x7cXQF9phmTRfpJ-lufKPg/view?usp=drive_web", category: "Ciudad" },
+            { id: 6, tag: "Módulo 6", title: "Búsqueda Violaciones Ciudad de Coral Springs", desc: "Aprende a cómo buscar las violaciones para esta ciudad del estado de Florida.", url: "https://drive.google.com/file/d/19AGVNICuLvPuFIQUhbyOUSkGCIZfH3Q8/view", category: "Ciudad" },
+            { id: 7, tag: "Módulo 7", title: "Búsqueda Violaciones Ciudad de Coconut Creek", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Coconut Creek.", url: "#", category: "Ciudad" },
+            { id: 8, tag: "Módulo 8", title: "Búsqueda Violaciones Ciudad de Cooper City", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Cooper City.", url: "#", category: "Ciudad" },
+            { id: 9, tag: "Módulo 9", title: "Búsqueda Violaciones Ciudad de Dania Beach", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Dania Beach.", url: "#", category: "Ciudad" },
+            { id: 10, tag: "Módulo 10", title: "Búsqueda Violaciones Ciudad de Deerfield Beach", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Deerfield Beach.", url: "#", category: "Ciudad" },
+            { id: 11, tag: "Módulo 11", title: "Búsqueda Violaciones Ciudad de Fort Lauderdale", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Fort Lauderdale.", url: "#", category: "Ciudad" },
+            { id: 12, tag: "Módulo 12", title: "Búsqueda Violaciones Ciudad de Hallandale Beach", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Hallandale Beach.", url: "https://drive.google.com/file/d/1eWOmVEM-2E2-yLjZWX-KCMXEBbSZegE-/view?usp=sharing", category: "Ciudad" },
+            { id: 13, tag: "Módulo 13", title: "Búsqueda Violaciones Ciudad de Lauderdale Lakes", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Lauderdale Lakes.", url: "#", category: "Ciudad" },
+            { id: 14, tag: "Módulo 14", title: "Búsqueda Violaciones Ciudad de Lauderhill", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Lauderhill.", url: "#", category: "Ciudad" },
+            { id: 15, tag: "Módulo 15", title: "Búsqueda Violaciones Ciudad de Lighthouse Point", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Lighthouse Point.", url: "https://drive.google.com/file/d/15x8ATknnkquzeAV-nUnqJTYEVf70H812/view?usp=sharing", category: "Ciudad" },
+            { id: 16, tag: "Módulo 16", title: "Búsqueda Violaciones Ciudad de Margate", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Margate.", url: "#", category: "Ciudad" },
+            { id: 17, tag: "Módulo 17", title: "Búsqueda Violaciones Ciudad de North Lauderdale", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de North Lauderdale.", url: "#", category: "Ciudad" },
+            { id: 18, tag: "Módulo 18", title: "Búsqueda Violaciones Ciudad de Oakland Park", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Oakland Park.", url: "#", category: "Ciudad" },
+            { id: 19, tag: "Módulo 19", title: "Búsqueda Violaciones Ciudad de Parkland", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Parkland.", url: "#", category: "Ciudad" },
+            { id: 20, tag: "Módulo 20", title: "Búsqueda Violaciones Ciudad de Pembroke Pines", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Pembroke Pines.", url: "https://drive.google.com/file/d/1WYi-z370S1L9u5m-PmTJUHuOoLPFzjYK/view?usp=sharing", category: "Ciudad" },
+            { id: 21, tag: "Módulo 21", title: "Búsqueda Violaciones Ciudad de Plantation", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Plantation.", url: "#", category: "Ciudad" },
+            { id: 22, tag: "Módulo 22", title: "Búsqueda Violaciones Ciudad de Pompano Beach", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Pompano Beach.", url: "#", category: "Ciudad" },
+            { id: 23, tag: "Módulo 23", title: "Búsqueda Violaciones Ciudad de Sunrise", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Sunrise.", url: "https://drive.google.com/file/d/1bbLy7y1V23gkgGqyoL9JUB-GpcDy-HAT/view?usp=sharing", category: "Ciudad" },
+            { id: 24, tag: "Módulo 24", title: "Búsqueda Violaciones Ciudad de Tamarac", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Tamarac.", url: "#", category: "Ciudad" },
+            { id: 25, tag: "Módulo 25", title: "Búsqueda Violaciones Ciudad de West Park", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de West Park.", url: "#", category: "Ciudad" },
+            { id: 26, tag: "Módulo 26", title: "Búsqueda Violaciones Ciudad de Weston", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Weston.", url: "#", category: "Ciudad" },
+            { id: 27, tag: "Módulo 27", title: "Búsqueda Violaciones Ciudad de Wilton Manors", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en la ciudad de Wilton Manors.", url: "#", category: "Ciudad" },
+            { id: 28, tag: "Módulo 28", title: "Búsqueda Violaciones del Town de Davie", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en el Town de Davie.", url: "#", category: "Town" },
+            { id: 29, tag: "Módulo 29", title: "Búsqueda Violaciones del Town de Hillsboro Beach", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en el Town de Hillsboro Beach.", url: "#", category: "Town" },
+            { id: 30, tag: "Módulo 30", title: "Búsqueda Violaciones del Town de Pembroke Park", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en el Town de Pembroke Park.", url: "#", category: "Town" },
+            { id: 31, tag: "Módulo 31", title: "Búsqueda Violaciones del Village de Lazy Lake", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en el Village de Lazy Lake.", url: "#", category: "Village" },
+            { id: 32, tag: "Módulo 32", title: "Búsqueda Violaciones del Village de Sea Ranch Lakes", desc: "Cuáles pasos se deben dar para poder encontrar las violaciones en el Village de Sea Ranch Lakes.", url: "#", category: "Village" },
+        ];
+
+        // State managers
+        let completedIds = [];
+        let searchQuery = "";
+        let selectedCategory = "All";
+        let statusFilter = "All";
+        let openedModuleId = null;
+
+        // Load resources from localStorage safely
+        function initStorage() {
+            try {
+                const stored = localStorage.getItem("completedModules");
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed)) {
+                        completedIds = parsed.filter(id => typeof id === "number");
+                    }
+                }
+            } catch (err) {
+                completedIds = [];
+            }
+        }
+
+        function saveStorage() {
+            try {
+                localStorage.setItem("completedModules", JSON.stringify(completedIds));
+            } catch (err) {}
+        }
+
+        // Render UI Controls
+        function renderProgress() {
+            const total = trainingModules.length;
+            const completed = completedIds.length;
+            const percent = Math.round((completed / total) * 100);
+
+            document.getElementById("progress-percentage").innerText = `${percent}%`;
+            document.getElementById("progress-stats").innerText = `${completed} de ${total} Completados`;
+            document.getElementById("progress-bar-fill").style.width = `${percent}%`;
+        }
+
+        // Toggle state
+        function toggleComplete(id) {
+            id = Number(id);
+            if (completedIds.includes(id)) {
+                completedIds = completedIds.filter(mId => mId !== id);
+            } else {
+                completedIds.push(id);
+            }
+            saveStorage();
+            renderProgress();
+            renderGrid();
+        }
+
+        function resetProgress() {
+            if (confirm("¿Estás seguro de que deseas restablecer todo tu progreso de entrenamiento de Florida?")) {
+                completedIds = [];
+                saveStorage();
+                renderProgress();
+                renderGrid();
+            }
+        }
+
+        // Filter and Render Cards Grid
+        function getFilteredModules() {
+            return trainingModules.filter(module => {
+                const query = searchQuery.toLowerCase();
+                const matchesSearch = 
+                    module.title.toLowerCase().includes(query) || 
+                    module.desc.toLowerCase().includes(query) || 
+                    module.tag.toLowerCase().includes(query);
+
+                const matchesCategory = selectedCategory === "All" || module.category === selectedCategory;
+
+                const isCompleted = completedIds.includes(module.id);
+                const matchesStatus = 
+                    statusFilter === "All" || 
+                    (statusFilter === "Completed" && isCompleted) || 
+                    (statusFilter === "Pending" && !isCompleted);
+
+                return matchesSearch && matchesCategory && matchesStatus;
+            });
+        }
+
+        function handleSearch(val) {
+            searchQuery = val;
+            const clearBtn = document.getElementById("search-clear-btn");
+            if (val) {
+                clearBtn.classList.remove("hidden");
+            } else {
+                clearBtn.classList.add("hidden");
+            }
+            renderGrid();
+        }
+
+        function clearSearch() {
+            document.getElementById("search-input").value = "";
+            handleSearch("");
+        }
+
+        function changeCategory(cat) {
+            selectedCategory = cat;
+            
+            // Adjust categories styling
+            ["all", "ciudad", "town", "village"].forEach(c => {
+                const btn = document.getElementById(`cat-${c}`);
+                if (c === cat.toLowerCase()) {
+                    btn.className = "rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer bg-slate-900 text-white shadow-sm";
+                } else {
+                    btn.className = "rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900";
+                }
+            });
+
+            renderGrid();
+        }
+
+        function changeStatus(stat) {
+            statusFilter = stat;
+            
+            // Adjust status styling
+            ["all", "pending", "completed"].forEach(s => {
+                const btn = document.getElementById(`stat-${s}`);
+                if (s === stat.toLowerCase()) {
+                    btn.className = s === "completed" 
+                        ? "rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer bg-teal-505 bg-teal-600 text-white shadow-sm"
+                        : s === "pending"
+                        ? "rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer bg-amber-500 text-white shadow-sm"
+                        : "rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer bg-slate-950 text-white shadow-sm";
+                } else {
+                    btn.className = "rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900";
+                }
+            });
+
+            renderGrid();
+        }
+
+        // Action: Mark displayed items as finished
+        function markVisibleAsComplete() {
+            const visible = getFilteredModules();
+            visible.forEach(m => {
+                if (!completedIds.includes(m.id)) {
+                    completedIds.push(m.id);
+                }
+            });
+            saveStorage();
+            renderProgress();
+            renderGrid();
+        }
+
+        // Open manual view details modal
+        function openManualModal(id) {
+            id = Number(id);
+            const module = trainingModules.find(m => m.id === id);
+            if (!module) return;
+
+            openedModuleId = id;
+            document.getElementById("modal-title").innerText = `Búsqueda de ${module.title.replace("Búsqueda Violaciones ", "")}`;
+            document.getElementById("modal-tag").innerText = `${module.tag} — Flujo Manual`;
+            document.getElementById("modal-category").innerText = module.category;
+
+            // Setup action button inside modal
+            const actionBtn = document.getElementById("modal-action-btn");
+            const isCompleted = completedIds.includes(module.id);
+            if (isCompleted) {
+                actionBtn.innerText = "Módulo Listo (Quitar)";
+                actionBtn.className = "flex-1 rounded-xl bg-slate-800 py-3 text-center text-xs font-bold text-white hover:bg-slate-700 transition-colors shadow-md cursor-pointer";
+            } else {
+                actionBtn.innerText = "Marcar Módulo como Realizado";
+                actionBtn.className = "flex-1 rounded-xl bg-gradient-to-r from-teal-600 to-indigo-600 py-3 text-center text-xs font-bold text-white hover:opacity-95 transition-opacity shadow-md cursor-pointer";
+            }
+
+            actionBtn.onclick = function() {
+                toggleComplete(module.id);
+                closeModal();
+            };
+
+            const modal = document.getElementById("info-modal");
+            modal.classList.remove("hidden");
+            document.body.classList.add("overflow-hidden");
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("info-modal");
+            modal.classList.add("hidden");
+            document.body.classList.remove("overflow-hidden");
+            openedModuleId = null;
+        }
+
+        // Dynamically build and inject grid list
+        function renderGrid() {
+            const container = document.getElementById("modules-container");
+            const filtered = getFilteredModules();
+
+            // Update visible counts
+            document.getElementById("visible-modules-count").innerHTML = `Mostrando <span class="font-extrabold text-teal-600">${filtered.length}</span> módulos del entrenamiento`;
+
+            // Adjust master action button visibility
+            const markBtn = document.getElementById("mark-all-btn");
+            const completedCount = completedIds.length;
+            const totalCount = trainingModules.length;
+            if (filtered.length > 0 && completedCount < totalCount) {
+                markBtn.style.display = "inline-flex";
+            } else {
+                markBtn.style.display = "none";
+            }
+
+            if (filtered.length === 0) {
+                container.className = "mt-4 block";
+                container.innerHTML = `
+                    <div class="rounded-2xl border-2 border-dashed border-slate-200 bg-white py-16 text-center shadow-sm max-w-xl mx-auto">
+                        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-500">
+                            <i data-lucide="search" class="h-6 w-6"></i>
+                        </div>
+                        <h3 class="mt-4 font-display text-base font-bold text-slate-800">
+                            No se encontraron módulos de entrenamiento
+                        </h3>
+                        <p class="mx-auto mt-1 max-w-sm text-xs text-slate-400 font-sans">
+                            Prueba cambiando los términos de búsqueda o modificando los filtros seleccionados.
+                        </p>
+                        <button
+                            onclick="resetAllFilters()"
+                            class="mt-4 inline-flex items-center gap-1 text-xs font-bold text-teal-600 hover:text-teal-800 underline underline-offset-4"
+                        >
+                            Limpiar todos los filtros
+                        </button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.className = "mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3";
+            let htmlContent = "";
+
+            filtered.forEach(module => {
+                const isCompleted = completedIds.includes(module.id);
+                const isUrlEmpty = module.url === "#";
+
+                const categoryLabelClass = module.category === "Village" 
+                    ? "bg-indigo-50 text-indigo-700 border-indigo-100" 
+                    : module.category === "Town"
+                    ? "bg-amber-50 text-amber-800 border-amber-200"
+                    : "bg-teal-50 text-teal-700 border-teal-100";
+
+                const activeBorderClass = isCompleted 
+                    ? "border-emerald-500 bg-emerald-50/10" 
+                    : "border-slate-100 hover:border-slate-200";
+
+                const visualCheckMark = isCompleted 
+                    ? `<div class="absolute top-4 right-4 z-10 pointer-events-none">
+                         <i data-lucide="check-circle-2" class="h-6 w-6 text-emerald-600 fill-emerald-50"></i>
+                       </div>` 
+                    : "";
+
+                const leftActionBtn = isUrlEmpty 
+                    ? `<button
+                            onclick="openManualModal(${module.id})"
+                            class="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border-2 border-amber-200 bg-amber-50/50 px-3 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-100/70 transition-colors cursor-pointer"
+                        >
+                            <i data-lucide="alert-circle" class="h-3.5 w-3.5 text-amber-600"></i>
+                            <span>Búsqueda Manual</span>
+                        </button>`
+                    : `<a
+                            href="${module.url}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-teal-600 to-sky-600 px-3 py-2.5 text-xs font-bold text-white hover:from-teal-700 hover:to-sky-700 transition-all shadow-sm cursor-pointer shadow-sky-100"
+                        >
+                            <span>Ver Recurso</span>
+                            <i data-lucide="external-link" class="h-3 w-3 text-sky-100"></i>
+                        </a>`;
+
+                const toggleActiveBtnClass = isCompleted
+                    ? "bg-emerald-600 text-white shadow-sm shadow-emerald-100 hover:bg-emerald-700"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200";
+
+                const toggleBtnLabel = isCompleted ? "✓ Listo" : "Listo";
+
+                htmlContent += `
+                    <div class="relative flex flex-col justify-between rounded-2xl border-2 bg-white p-5 transition-all duration-300 luxury-shadow ${activeBorderClass}">
+                        ${visualCheckMark}
+                        <div class="space-y-3.5">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="inline-block rounded-lg px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase ${isCompleted ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'}">
+                                    ${module.tag}
+                                </span>
+                                <span class="inline-block rounded-lg px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase border ${categoryLabelClass}">
+                                    ${module.category}
+                                </span>
                             </div>
-                            <button onClick={handleReset} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50/50 px-4.5 text-xs font-bold text-red-650 hover:bg-red-100/70 transition-colors">
-                                Resetear Progreso
+
+                            <div>
+                                <h3 class="font-display font-extrabold text-slate-900 leading-snug text-[15px]">
+                                    ${module.title}
+                                </h3>
+                                <p class="mt-1.5 text-xs text-slate-500 line-clamp-3 leading-relaxed font-sans">
+                                    ${module.desc}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Card action row -->
+                        <div class="mt-5 pt-4 border-t border-slate-100 flex items-center gap-2">
+                            ${leftActionBtn}
+                            <button
+                                onclick="toggleComplete(${module.id})"
+                                class="inline-flex px-3.5 py-2.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${toggleActiveBtnClass}"
+                            >
+                                ${toggleBtnLabel}
                             </button>
                         </div>
                     </div>
+                `;
+            });
 
-                    {/* Filtros e Inputs Interactivos */}
-                    <div className="mt-8 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4.5 rounded-2xl border-2 border-slate-100 shadow-sm luxury-shadow">
-                        <div className="relative flex-1 max-w-md">
-                            <input 
-                                type="text" 
-                                placeholder="Buscar temas, módulos o municipios de Florida..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full rounded-xl border-2 border-slate-100 bg-slate-50/50 py-2.5 pl-4 pr-10 text-sm outline-none placeholder:text-slate-400 focus:border-teal-500 focus:bg-white transition-all font-sans font-medium"
-                            />
-                        </div>
-
-                        {/* Tabs de Filtros de Categorías */}
-                        <div className="flex flex-wrap items-center gap-2">
-                            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
-                                {["All", "Ciudad", "Town", "Village"].map(cat => (
-                                    <button 
-                                        key={cat} 
-                                        onClick={() => setSelectedCategory(cat)}
-                                        className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${selectedCategory === cat ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
-                                    >
-                                        {cat === "All" ? `Todos (${total})` : `${cat}s (${categoryCounts[cat]})`}
-                                    </button>
-                                ))}
-                            </div>
-
-                            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
-                                {["All", "Pending", "Completed"].map(st => (
-                                    <button 
-                                        key={st} 
-                                        onClick={() => setStatusFilter(st)}
-                                        className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${statusFilter === st ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
-                                    >
-                                        {st === "All" ? "Todos" : st === "Pending" ? "Pendientes" : "Listos"}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Grid de Tarjetas de Módulos */}
-                    <div className="mt-8">
-                        {filtered.length === 0 ? (
-                            <div className="rounded-2xl border-2 border-dashed border-slate-200 bg-white py-16 text-center">
-                                <h3 className="font-display text-sm font-bold text-slate-800">No se encontraron resultados</h3>
-                                <p className="text-xs text-slate-400 mt-1">Prueba a realizar otra búsqueda o ajusta tus filtros seleccionados.</p>
-                            </div>
-                        ) : (
-                            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                                {filtered.map(module => {
-                                    const isDone = completedIds.includes(module.id);
-                                    const isManual = module.url === "#";
-                                    return (
-                                        <div 
-                                            key={module.id} 
-                                            className={`relative flex flex-col justify-between rounded-2xl border-2 bg-white p-5 transition-all duration-300 luxury-shadow ${isDone ? "border-teal-500 bg-emerald-50/10" : "border-slate-100"}`}
-                                        >
-                                            {isDone && (
-                                                <div className="absolute top-4 right-4 z-10 pointer-events-none">
-                                                    <span className="text-emerald-600 text-xl">✔</span>
-                                                </div>
-                                            )}
-
-                                            <div className="space-y-3.5">
-                                                <div className="flex items-center gap-1.5 flex-wrap">
-                                                    <span className={`inline-block rounded-lg px-2.5 py-1 text-[10px] font-bold uppercase ${isDone ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'}`}>
-                                                        {module.tag}
-                                                    </span>
-                                                    <span className={`inline-block rounded-lg px-2.5 py-1 text-[10px] font-bold uppercase border ${module.category === 'Village' ? 'bg-indigo-50 text-indigo-700 border-indigo-100' : module.category === 'Town' ? 'bg-amber-50 text-amber-800 border-amber-200' : 'bg-teal-50 text-teal-700 border-teal-100'}`}>
-                                                        {module.category}
-                                                    </span>
-                                                </div>
-
-                                                <div>
-                                                    <h3 className="font-display font-extrabold text-slate-900 leading-snug text-base">
-                                                        {module.title}
-                                                    </h3>
-                                                    <p className="mt-1.5 text-xs text-slate-500 leading-relaxed font-sans font-medium line-clamp-3">
-                                                        {module.desc}
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            {/* Acciones de la Tarjeta */}
-                                            <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-2">
-                                                {isManual ? (
-                                                    <button 
-                                                        onClick={() => setActiveInfoModal(module)}
-                                                        className="inline-flex flex-1 items-center justify-center rounded-xl border-2 border-amber-200 bg-amber-50/50 px-3 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-100 transition-colors"
-                                                    >
-                                                        Búsqueda Manual
-                                                    </button>
-                                                ) : (
-                                                    <a 
-                                                        href={module.url} 
-                                                        target="_blank" 
-                                                        className="inline-flex flex-1 items-center justify-center rounded-xl bg-gradient-to-r from-teal-600 to-sky-600 px-3 py-2.5 text-xs font-bold text-white hover:opacity-90 transition-all shadow-sm"
-                                                    >
-                                                        Ver Recurso
-                                                    </a>
-                                                )}
-
-                                                <button 
-                                                    onClick={() => handleToggleComplete(module.id)}
-                                                    className={`inline-flex px-3.5 py-2.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${isDone ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-205'}`}
-                                                >
-                                                    {isDone ? "✓ Completado" : "Pendiente"}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Guía de Metodología de Trabajo Corporativo */}
-                    <div className="mt-16 rounded-2xl border-2 border-indigo-100 bg-gradient-to-b from-white to-slate-50/50 p-6 md:p-8 shadow-sm luxury-shadow relative overflow-hidden">
-                        <h3 className="font-display text-lg font-bold text-slate-900 flex items-center gap-2">
-                            <span>Guía Práctica & Metodología de Trabajo</span>
-                        </h3>
-                        <p className="mt-2 text-sm text-slate-500 font-medium font-sans">
-                            Sigue las recomendaciones del equipo de auditoría general para una verificación de violaciones sin desvíos técnicos:
-                        </p>
-                        
-                        <div className="mt-8 grid gap-6 sm:grid-cols-3 relative z-10">
-                            {[
-                                { step: 1, title: "Material Audiovisual", bg: "bg-teal-50 text-teal-700 border-teal-100", desc: "Usa el recurso directo enlazado en Google Drive para examinar el flujo normativo de la ciudad." },
-                                { step: 2, title: "Portales de Búsqueda Manual", bg: "bg-amber-50 text-amber-700 border-amber-100", desc: "Abre el sitio oficial de la ciudad en municipios sin material directo y usa el folio parcelario o dirección." },
-                                { step: 3, title: "Actualización Automatizada", bg: "bg-indigo-50 text-indigo-700 border-indigo-100", desc: "Marca 'Listo' en el checklist y tu progreso se guardará automáticamente en este navegador local." }
-                            ].map((s, i) => (
-                                <div key={i} className="space-y-3.5 p-4 rounded-xl bg-white border border-slate-150 shadow-sm">
-                                    <div className={`flex h-9 w-9 items-center justify-center rounded-xl text-xs font-extrabold border ${s.bg}`}>
-                                        {s.step}
-                                    </div>
-                                    <p className="text-xs font-bold text-slate-800">{s.title}</p>
-                                    <p className="text-xs text-slate-400 leading-relaxed font-sans font-medium">{s.desc}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Modal para Búsquedas Manuales */}
-                    {activeInfoModal && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                            <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setActiveInfoModal(null)}></div>
-                            <div className="relative w-full max-w-lg rounded-3xl border-2 border-amber-105 bg-white p-6 shadow-2xl z-10 overflow-hidden">
-                                <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-amber-400 via-teal-400 to-indigo-500"></div>
-
-                                <div className="flex flex-col items-start gap-4 mt-2">
-                                    <div className="flex items-center gap-1.5">
-                                        <span className="text-[10px] font-bold tracking-wider uppercase text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100">
-                                            {activeInfoModal.tag} — Flujo Manual
-                                        </span>
-                                        <span className="text-[10px] bg-slate-100 text-slate-700 font-bold tracking-wider uppercase px-2 py-0.5 rounded-md">
-                                            {activeInfoModal.category}
-                                        </span>
-                                    </div>
-                                    
-                                    <h3 className="font-display text-2xl font-black text-slate-900 leading-tight">
-                                        Búsqueda de {activeInfoModal.cityName}
-                                    </h3>
-
-                                    <div className="space-y-3 text-sm text-slate-500 font-medium">
-                                        <p>Para este municipio el flujo de código y violaciones consiste de consultas en su propio portal público:</p>
-                                        <ul className="space-y-2.5 border-l-2 border-amber-300 pl-4 py-1 text-xs text-slate-650 font-sans">
-                                            <li><strong>Paso 1:</strong> Accede al buscador de registros, portal de records estatales o <em>Citizen Self Service (CSS)</em> de la ciudad.</li>
-                                            <li><strong>Paso 2:</strong> Introduce preferiblemente el número de Folio Parcelario (Parcel ID) o folio municipal para agilizar el rastreo de incidencias vigentes.</li>
-                                            <li><strong>Paso 3:</strong> Verifica los registros del departamento de <em>Building Division</em> o <em>Code Enforcement</em>.</li>
-                                        </ul>
-                                        <p className="text-xs bg-amber-50/50 border border-amber-100 p-3 rounded-xl text-amber-800 italic">
-                                            "Cualquier duda adicional o fallos del portal municipal de esta subdivisión puede escalarse con el supervisor, Lic. Luis B. Gomez."
-                                        </p>
-                                    </div>
-
-                                    <div className="mt-4 flex w-full gap-3">
-                                        <button 
-                                            onClick={() => {
-                                                if (!completedIds.includes(activeInfoModal.id)) handleToggleComplete(activeInfoModal.id);
-                                                setActiveInfoModal(null);
-                                            }}
-                                            className="flex-1 rounded-xl bg-gradient-to-r from-teal-600 to-indigo-600 py-3 text-center text-xs font-bold text-white shadow-md hover:opacity-95 transition-all"
-                                        >
-                                            Marcar Módulo Completado
-                                        </button>
-                                        <button onClick={() => setActiveInfoModal(null)} className="rounded-xl border border-slate-200 py-3 px-5 text-center text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors">
-                                            Cerrar
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                </div>
-            );
+            container.innerHTML = htmlContent;
+            // Re-render lucide icons dynamically
+            lucide.createIcons();
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        // Reset search & filters
+        function resetAllFilters() {
+            document.getElementById("search-input").value = "";
+            searchQuery = "";
+            document.getElementById("search-clear-btn").classList.add("hidden");
+            changeCategory("All");
+            changeStatus("All");
+        }
+
+        // Initial setup
+        window.onload = function() {
+            initStorage();
+            renderProgress();
+            renderGrid();
+        };
     </script>
 </body>
 </html>
