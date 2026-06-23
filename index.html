@@ -7,7 +7,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons CDN -->
@@ -308,59 +308,92 @@
     <!-- Main Filter and Modules Container -->
     <main class="mx-auto max-w-5xl px-6 pt-8">
         
-        <!-- Controls Bar -->
-        <div class="flex flex-col gap-4 rounded-2xl border-2 border-slate-100 bg-white p-5 shadow-md md:flex-row md:items-center md:justify-between luxury-shadow">
-            
-            <!-- Search Bar -->
-            <div class="relative flex-1 max-w-md">
-                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <i data-lucide="search" class="h-4.5 w-4.5 text-teal-500"></i>
+        <!-- Controls Bar - HIGHLY EMPHASIZED AND HIGHLIGHTED -->
+        <div class="relative overflow-hidden rounded-3xl border-2 border-teal-500/40 bg-white p-6 md:p-8 shadow-xl shadow-teal-500/5 luxury-shadow">
+            <!-- Decorative interior ambient highlights -->
+            <div class="absolute -right-12 -top-12 -z-10 h-32 w-32 rounded-full bg-teal-400/10 blur-xl"></div>
+            <div class="absolute -left-12 -bottom-12 -z-10 h-32 w-32 rounded-full bg-indigo-400/10 blur-xl"></div>
+
+            <!-- Header Panel inside Controls -->
+            <div class="mb-6 flex items-center gap-2.5 border-b border-slate-100 pb-4">
+                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-150 bg-teal-50 text-teal-600 border border-teal-200">
+                    <i data-lucide="sliders-horizontal" class="h-4.5 w-4.5"></i>
                 </div>
-                <input
-                    type="text"
-                    id="search-input"
-                    placeholder="Buscar temas, módulos o municipios de Florida..."
-                    class="w-full rounded-xl border-2 border-slate-100 bg-slate-50/50 py-2.5 pl-9 pr-8 text-sm outline-none placeholder:text-slate-400 focus:border-teal-500 focus:bg-white transition-all font-sans"
-                    oninput="handleSearch(this.value)"
-                >
-                <button 
-                    id="search-clear-btn"
-                    onclick="clearSearch()"
-                    class="absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400 hover:text-teal-600 hidden"
-                >
-                    <i data-lucide="x" class="h-4 w-4"></i>
-                </button>
+                <div>
+                    <h3 class="font-display text-sm font-extrabold tracking-tight text-slate-900">Panel de Control, Búsqueda y Filtrado</h3>
+                    <p class="text-[11px] text-slate-400 font-sans">Filtra módulos por tipo, estado de realización o escribe un término de búsqueda rápido.</p>
+                </div>
             </div>
-
-            <!-- Categories & Status Controls -->
-            <div class="flex flex-wrap items-center gap-3">
-                <!-- Category Selectors -->
-                <div class="flex items-center gap-1 rounded-xl bg-slate-100 p-1" id="category-selector">
-                    <button id="cat-all" onclick="changeCategory('All')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer bg-slate-900 text-white shadow-sm">
-                        Todos
-                    </button>
-                    <button id="cat-ciudad" onclick="changeCategory('Ciudad')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
-                        Ciudades
-                    </button>
-                    <button id="cat-town" onclick="changeCategory('Town')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
-                        Towns
-                    </button>
-                    <button id="cat-village" onclick="changeCategory('Village')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
-                        Villages
-                    </button>
+            
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <!-- Search Bar Section -->
+                <div class="relative flex-1 max-w-lg">
+                    <label for="search-input" class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-2 font-display">
+                        Escribe para Buscar
+                    </label>
+                    <div class="relative">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                            <i data-lucide="search" class="h-5 w-5 text-teal-600"></i>
+                        </div>
+                        <input
+                            type="text"
+                            id="search-input"
+                            placeholder="Buscar por temas, módulos o municipios de Florida..."
+                            class="w-full rounded-2xl border-2 border-teal-500 bg-slate-50/50 py-3 pl-11 pr-10 text-sm font-medium outline-none placeholder:text-slate-400 focus:border-teal-600 focus:bg-white focus:ring-4 focus:ring-teal-500/15 transition-all font-sans shadow-inner"
+                            oninput="handleSearch(this.value)"
+                        >
+                        <button 
+                            id="search-clear-btn"
+                            onclick="clearSearch()"
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-teal-600 transition-colors hidden"
+                        >
+                            <i data-lucide="x" class="h-5 w-5"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Status Filter -->
-                <div class="flex items-center gap-1 rounded-xl bg-slate-100 p-1" id="status-selector">
-                    <button id="stat-all" onclick="changeStatus('All')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer bg-slate-950 text-white shadow-sm">
-                        Ambos
-                    </button>
-                    <button id="stat-pending" onclick="changeStatus('Pending')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
-                        Pendientes
-                    </button>
-                    <button id="stat-completed" onclick="changeStatus('Completed')" class="rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
-                        Listos
-                    </button>
+                <!-- Categories & Status Controls -->
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+                    
+                    <!-- Category Selector -->
+                    <div class="space-y-2">
+                        <span class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 font-display">
+                            Categoría
+                        </span>
+                        <div class="flex items-center gap-1 rounded-xl bg-slate-100 p-1 border border-slate-200/50" id="category-selector">
+                            <button id="cat-all" onclick="changeCategory('All')" class="rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer bg-slate-900 text-white shadow-sm">
+                                Todos
+                            </button>
+                            <button id="cat-ciudad" onclick="changeCategory('Ciudad')" class="rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
+                                Ciudades
+                            </button>
+                            <button id="cat-town" onclick="changeCategory('Town')" class="rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
+                                Towns
+                            </button>
+                            <button id="cat-village" onclick="changeCategory('Village')" class="rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
+                                Villages
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="space-y-2">
+                        <span class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 font-display">
+                            Estado de Progreso
+                        </span>
+                        <div class="flex items-center gap-1 rounded-xl bg-slate-100 p-1 border border-slate-200/50" id="status-selector">
+                            <button id="stat-all" onclick="changeStatus('All')" class="rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer bg-slate-950 text-white shadow-sm">
+                                Ambos
+                            </button>
+                            <button id="stat-pending" onclick="changeStatus('Pending')" class="rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
+                                Pendientes
+                            </button>
+                            <button id="stat-completed" onclick="changeStatus('Completed')" class="rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900">
+                                Listos
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -683,13 +716,13 @@
         function changeCategory(cat) {
             selectedCategory = cat;
             
-            // Adjust categories styling
+            // Adjust categories styling (consistent with current design)
             ["all", "ciudad", "town", "village"].forEach(c => {
                 const btn = document.getElementById(`cat-${c}`);
                 if (c === cat.toLowerCase()) {
-                    btn.className = "rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer bg-slate-900 text-white shadow-sm";
+                    btn.className = "rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer bg-slate-900 text-white shadow-sm";
                 } else {
-                    btn.className = "rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900";
+                    btn.className = "rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900";
                 }
             });
 
@@ -704,12 +737,12 @@
                 const btn = document.getElementById(`stat-${s}`);
                 if (s === stat.toLowerCase()) {
                     btn.className = s === "completed" 
-                        ? "rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer bg-teal-505 bg-teal-600 text-white shadow-sm"
+                        ? "rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer bg-teal-600 text-white shadow-sm"
                         : s === "pending"
-                        ? "rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer bg-amber-500 text-white shadow-sm"
-                        : "rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer bg-slate-950 text-white shadow-sm";
+                        ? "rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer bg-amber-500 text-white shadow-sm"
+                        : "rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer bg-slate-950 text-white shadow-sm";
                 } else {
-                    btn.className = "rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900";
+                    btn.className = "rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900";
                 }
             });
 
@@ -761,6 +794,7 @@
             document.body.classList.add("overflow-hidden");
         }
 
+        // Close details modal safely
         function closeModal() {
             const modal = document.getElementById("info-modal");
             modal.classList.add("hidden");
